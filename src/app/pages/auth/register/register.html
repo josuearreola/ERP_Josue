@@ -1,37 +1,117 @@
-<div class="flex items-center justify-center h-full">
-    <p-card>
+<div class="flex items-center justify-center h-full p-4">
+    <p-card class="w-full max-w-lg">
         <ng-template #header>
             <div class="flex flex-col items-center gap-2 p-4">
                 <h2 class="text-2xl font-bold m-0">Registrarse</h2>
             </div>
         </ng-template>
         <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
+            @if (registrationErrors.length > 0) {
+            <div class="flex flex-col gap-2">
+                @for (error of registrationErrors; track error) {
+                <p-message severity="error" size="small" variant="simple">{{ error }}</p-message>
+                }
+            </div>
+            }
+
             <div class="flex flex-col gap-1">
-                <input pInputText type="text" id="username" placeholder="Usuario" name="username" [(ngModel)]="user.username" #username="ngModel" [invalid]="username.invalid && (username.touched || exampleForm.submitted)" required class="w-full" />
-                @if (username.invalid && (username.touched || exampleForm.submitted)) {
+                <label for="username" class="font-semibold">Usuario</label>
+                <input pInputText type="text" id="username" placeholder="Usuario" name="username" [(ngModel)]="user.username"
+                    #username="ngModel" [invalid]="username.invalid && username.touched" required class="w-full" />
+                @if (username.invalid && username.touched) {
                     <p-message severity="error" size="small" variant="simple">Usuario es requerido.</p-message>
                 }
             </div>
+
             <div class="flex flex-col gap-1">
-                <input pInputText type="email" id="email" name="email" placeholder="Correo" [(ngModel)]="user.email" #email="ngModel" required email [invalid]="email.invalid && (email.touched || exampleForm.submitted)" class="w-full" />
-                @if (email.invalid && (email.touched || exampleForm.submitted)) {
+                <label for="email" class="font-semibold">Correo Electrónico</label>
+                <input pInputText type="email" id="email" name="email" placeholder="correo@ejemplo.com" [(ngModel)]="user.email"
+                    #email="ngModel" required email [invalid]="email.invalid && email.touched" class="w-full" />
+                @if (email.invalid && email.touched) {
                     <p-message severity="error" size="small" variant="simple">
                         @if (email.hasError('required')) {
                             Correo es requerido.
                         }
                         @if (email.hasError('email')) {
-                            Ingrese un correo valido.
+                            Ingrese un correo válido.
+                            }
+                            </p-message>
+                            }
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label for="fullName" class="font-semibold">Nombre Completo</label>
+                                <input pInputText type="text" id="fullName" placeholder="Nombre completo" name="fullName"
+                                    [(ngModel)]="user.fullName" #fullName="ngModel" [invalid]="fullName.invalid && fullName.touched" required
+                                    class="w-full" />
+                                @if (fullName.invalid && fullName.touched) {
+                                <p-message severity="error" size="small" variant="simple">Nombre completo es requerido.</p-message>
+                                }
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label for="birthDate" class="font-semibold">Fecha de Nacimiento</label>
+                                <input pInputText type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" #birthDate="ngModel"
+                                    [invalid]="birthDate.invalid && birthDate.touched" required max="2010-12-31" class="w-full" />
+                                @if (birthDate.invalid && birthDate.touched) {
+                                <p-message severity="error" size="small" variant="simple">Fecha de nacimiento es requerida.</p-message>
+                                }
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label for="phone" class="font-semibold">Teléfono</label>
+                                <input pInputText type="tel" id="phone" placeholder="1234567890 (solo números)" name="phone"
+                                    [(ngModel)]="user.phone" #phone="ngModel" [invalid]="phone.invalid && phone.touched" required pattern="[0-9]+"
+                                    class="w-full" />
+                                @if (phone.invalid && phone.touched) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    @if (phone.hasError('required')) {
+                                    Teléfono es requerido.
+                                    }
+                                    @if (phone.hasError('pattern')) {
+                                    El teléfono debe contener solo números.
+                                    }
+                                </p-message>
+                                }
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label for="address" class="font-semibold">Dirección</label>
+                                <input pInputText type="text" id="address" placeholder="Dirección completa" name="address"
+                                    [(ngModel)]="user.address" #address="ngModel" [invalid]="address.invalid && address.touched" required
+                                    class="w-full" />
+                                @if (address.invalid && address.touched) {
+                                <p-message severity="error" size="small" variant="simple">Dirección es requerida.</p-message>
+                                }
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label for="password" class="font-semibold">Contraseña</label>
+                                <small class="text-gray-600">Mínimo 10 caracteres con símbolos especiales (!@#$%^&*)</small>
+                                <input pInputText type="password" id="password" placeholder="Contraseña" name="password" [(ngModel)]="user.password"
+                                    #password="ngModel" [invalid]="password.invalid && password.touched" required minlength="10" class="w-full" />
+                                @if (password.invalid && password.touched) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    @if (password.hasError('required')) {
+                                    Contraseña es requerida.
+                                    }
+                                    @if (password.hasError('minlength')) {
+                                    La contraseña debe tener al menos 10 caracteres.
                         }
                     </p-message>
                 }
             </div>
+
             <div class="flex flex-col gap-1">
-                <input pInputText type="password" id="password" placeholder="Contraseña" name="password" [(ngModel)]="user.password" #password="ngModel" [invalid]="password.invalid && (password.touched || exampleForm.submitted)" required class="w-full" />
-                @if (password.invalid && (password.touched || exampleForm.submitted)) {
-                    <p-message severity="error" size="small" variant="simple">Contraseña es requerida.</p-message>
+                <label for="confirmPassword" class="font-semibold">Confirmar Contraseña</label>
+                <input pInputText type="password" id="confirmPassword" placeholder="Confirmar contraseña" name="confirmPassword"
+                    [(ngModel)]="user.confirmPassword" #confirmPassword="ngModel"
+                    [invalid]="confirmPassword.invalid && confirmPassword.touched" required class="w-full" />
+                @if (confirmPassword.invalid && confirmPassword.touched) {
+                <p-message severity="error" size="small" variant="simple">Confirmación de contraseña es requerida.</p-message>
                 }
             </div>
-            <button pButton severity="primary" type="submit" label="Registrarse" class="w-full"></button>
+<button pButton severity="primary" type="submit" label="Registrarse" class="w-full mt-4"></button>
             <p class="text-center text-sm m-0">¿Ya tienes cuenta? <a routerLink="/auth/login" class="text-primary cursor-pointer">Iniciar sesión</a></p>
         </form>
     </p-card>

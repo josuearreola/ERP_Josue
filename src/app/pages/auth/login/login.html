@@ -6,9 +6,13 @@
             </div>
         </ng-template>
         <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
+            @if (loginError) {
+            <p-message severity="error" size="small" variant="simple">{{ loginError }}</p-message>
+            }
             <div class="flex flex-col gap-1">
-                <input pInputText type="email" id="email" name="email" placeholder="Correo" [(ngModel)]="user.email" #email="ngModel" required email [invalid]="email.invalid && (email.touched || exampleForm.submitted)" class="w-full" />
-                @if (email.invalid && (email.touched || exampleForm.submitted)) {
+                <input pInputText type="email" id="email" name="email" placeholder="Correo" [(ngModel)]="user.email" #email="ngModel"
+                    required email [invalid]="email.invalid && email.touched" class="w-full" />
+                @if (email.invalid && email.touched) {
                     <p-message severity="error" size="small" variant="simple">
                         @if (email.hasError('required')) {
                             Correo es requerido.
@@ -20,8 +24,9 @@
                 }
             </div>
             <div class="flex flex-col gap-1">
-                <input pInputText type="password" id="password" placeholder="Contraseña" name="password" [(ngModel)]="user.password" #password="ngModel" [invalid]="password.invalid && (password.touched || exampleForm.submitted)" required class="w-full" />
-                @if (password.invalid && (password.touched || exampleForm.submitted)) {
+                <input pInputText type="password" id="password" placeholder="Contraseña" name="password" [(ngModel)]="user.password"
+                    #password="ngModel" [invalid]="password.invalid && password.touched" required class="w-full" />
+                @if (password.invalid && password.touched) {
                     <p-message severity="error" size="small" variant="simple">Contraseña es requerida.</p-message>
                 }
             </div>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
@@ -19,9 +19,32 @@ export class Login {
     password: ''
   };
 
+  private validCredentials = [
+    { email: 'admin@admin.com', password: 'admin123456' },
+    { email: 'josue@gmail.com', password: 'josue123' },
+    { email: 'test@test.com', password: 'test123456' }
+  ];
+
+  loginError: string = '';
+
+  constructor(private router: Router) { }
+
   onSubmit(form: NgForm) {
+    this.loginError = '';
+
     if (form.valid) {
-      console.log('Form submitted:', this.user);
+      // Validar contra credenciales hardcodeadas
+      const validUser = this.validCredentials.find(
+        cred => cred.email === this.user.email && cred.password === this.user.password
+      );
+
+      if (validUser) {
+        console.log('Login exitoso:', this.user);
+        // Redirigir al dashboard o página principal
+        this.router.navigate(['/']);
+      } else {
+        this.loginError = 'Credenciales incorrectas. Verifique su email y contraseña.';
+      }
     }
   }
 }

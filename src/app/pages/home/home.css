@@ -1,0 +1,39 @@
+.welcome-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.welcome-section h1 {
+  color: #1e293b;
+  margin-bottom: 1rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.welcome-section p {
+  color: #64748b;
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+}
+
+.dashboard-preview {
+  background: #f1f5f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.dashboard-preview h3 {
+  color: #1e293b;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.dashboard-preview p {
+  color: #64748b;
+  margin: 0;
+}

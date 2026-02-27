@@ -1,0 +1,125 @@
+<div class="page-content">
+  <div class="form-header">
+    <h1>Gestión de Usuario</h1>
+    <p>Crea o edita la información del usuario</p>
+  </div>
+
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="user-form">
+    @if (formErrors.length > 0) {
+      <div class="errors-container">
+        @for (error of formErrors; track error) {
+          <p-message severity="error" size="small" variant="simple">{{ error }}</p-message>
+        }
+      </div>
+    }
+
+    <div class="form-row">
+      <div class="field">
+        <label for="username" class="field-label">Usuario</label>
+        <input pInputText type="text" id="username" placeholder="Usuario" name="username" [(ngModel)]="user.username"
+            #username="ngModel" [invalid]="username.invalid && username.touched" required class="field-input" />
+        @if (username.invalid && username.touched) {
+          <p-message severity="error" size="small" variant="simple">Usuario es requerido.</p-message>
+        }
+      </div>
+
+      <div class="field">
+        <label for="email" class="field-label">Correo Electrónico</label>
+        <input pInputText type="email" id="email" name="email" placeholder="correo@ejemplo.com" [(ngModel)]="user.email"
+            #email="ngModel" required email [invalid]="email.invalid && email.touched" class="field-input" />
+        @if (email.invalid && email.touched) {
+          <p-message severity="error" size="small" variant="simple">
+            @if (email.hasError('required')) {
+              Correo es requerido.
+            }
+            @if (email.hasError('email')) {
+              Ingrese un correo válido.
+            }
+          </p-message>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="fullName" class="field-label">Nombre Completo</label>
+      <input pInputText type="text" id="fullName" placeholder="Nombre completo" name="fullName"
+          [(ngModel)]="user.fullName" #fullName="ngModel" [invalid]="fullName.invalid && fullName.touched" required
+          class="field-input" />
+      @if (fullName.invalid && fullName.touched) {
+        <p-message severity="error" size="small" variant="simple">Nombre completo es requerido.</p-message>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="birthDate" class="field-label">Fecha de Nacimiento</label>
+        <input pInputText type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" #birthDate="ngModel"
+            [invalid]="birthDate.invalid && birthDate.touched" required max="2010-12-31" class="field-input" />
+        @if (birthDate.invalid && birthDate.touched) {
+          <p-message severity="error" size="small" variant="simple">Fecha de nacimiento es requerida.</p-message>
+        }
+      </div>
+
+      <div class="field">
+        <label for="phone" class="field-label">Teléfono</label>
+        <input pInputText type="tel" id="phone" placeholder="1234567890 (solo números)" name="phone"
+            [(ngModel)]="user.phone" #phone="ngModel" [invalid]="phone.invalid && phone.touched" required pattern="[0-9]+"
+            class="field-input" />
+        @if (phone.invalid && phone.touched) {
+          <p-message severity="error" size="small" variant="simple">
+            @if (phone.hasError('required')) {
+              Teléfono es requerido.
+            }
+            @if (phone.hasError('pattern')) {
+              El teléfono debe contener solo números.
+            }
+          </p-message>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="address" class="field-label">Dirección</label>
+      <input pInputText type="text" id="address" placeholder="Dirección completa" name="address"
+          [(ngModel)]="user.address" #address="ngModel" [invalid]="address.invalid && address.touched" required
+          class="field-input" />
+      @if (address.invalid && address.touched) {
+        <p-message severity="error" size="small" variant="simple">Dirección es requerida.</p-message>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="password" class="field-label">Contraseña</label>
+        <small class="password-hint">Mínimo 10 caracteres con símbolos especiales (!@#$%^&*)</small>
+        <input pInputText type="password" id="password" placeholder="Contraseña" name="password" [(ngModel)]="user.password"
+            #password="ngModel" [invalid]="password.invalid && password.touched" required minlength="10" class="field-input" />
+        @if (password.invalid && password.touched) {
+          <p-message severity="error" size="small" variant="simple">
+            @if (password.hasError('required')) {
+              Contraseña es requerida.
+            }
+            @if (password.hasError('minlength')) {
+              La contraseña debe tener al menos 10 caracteres.
+            }
+          </p-message>
+        }
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword" class="field-label">Confirmar Contraseña</label>
+        <input pInputText type="password" id="confirmPassword" placeholder="Confirmar contraseña" name="confirmPassword"
+            [(ngModel)]="user.confirmPassword" #confirmPassword="ngModel"
+            [invalid]="confirmPassword.invalid && confirmPassword.touched" required class="field-input" />
+        @if (confirmPassword.invalid && confirmPassword.touched) {
+          <p-message severity="error" size="small" variant="simple">Confirmación de contraseña es requerida.</p-message>
+        }
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button pButton severity="primary" type="submit" label="Guardar Usuario" class="save-button"></button>
+      <button pButton severity="secondary" type="button" label="Limpiar" class="clear-button" (click)="userForm.resetForm()"></button>
+    </div>
+  </form>
+</div>

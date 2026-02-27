@@ -33,15 +33,13 @@ export class Login {
     this.loginError = '';
 
     if (form.valid) {
-      // Validar contra credenciales hardcodeadas
       const validUser = this.validCredentials.find(
         cred => cred.email === this.user.email && cred.password === this.user.password
       );
 
       if (validUser) {
         console.log('Login exitoso:', this.user);
-        // Redirigir al dashboard o página principal
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard/home']);
       } else {
         this.loginError = 'Credenciales incorrectas. Verifique su email y contraseña.';
       }

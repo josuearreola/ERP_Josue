@@ -1,0 +1,21 @@
+<div class="layout-wrapper">
+  <!-- Sidebar -->
+  <div class="layout-sidebar" [class.sidebar-hidden]="!sidebarVisible">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="layout-main" [class.sidebar-hidden]="!sidebarVisible">
+    <!-- Top Bar -->
+    <div class="layout-topbar">
+    
+     
+
+    <!-- Content Area -->
+    <div class="layout-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

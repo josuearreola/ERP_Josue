@@ -1,4 +1,120 @@
 :host {
   display: block;
+  width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .login-container {
+    width: 100%;
   height: 100%;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 1rem;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .login-card form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .login-card .flex.flex-col.gap-1 {
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-card h2 {
+    color: #1e293b;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .login-card input[type="email"],
+  .login-card input[type="password"] {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    color: #1e293b;
+  }
+  
+  .login-card input[type="email"]:focus,
+  .login-card input[type="password"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+  }
+  
+  .login-card input[type="email"]:hover,
+  .login-card input[type="password"]:hover {
+    border-color: #cbd5e1;
+  }
+  
+  .login-card input::placeholder {
+    color: #64748b;
+    font-weight: 400;
+  }
+  
+  .login-card button {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .login-card button:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  
+  .login-card p {
+    color: #e2e8f0;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .login-card a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .login-card a:hover {
+    color: #3b82f6;
+    text-decoration: underline;
 }

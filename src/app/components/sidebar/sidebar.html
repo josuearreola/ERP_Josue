@@ -1,5 +1,11 @@
 <div class="sidebar-header">
   <h3>ERP Josue</h3>
+  @if (currentUser) {
+    <div class="user-badge">
+      <i class="pi pi-user"></i>
+      <span>{{ currentUser.username }}</span>
+    </div>
+  }
 </div>
 
 <div class="sidebar-content">
@@ -8,20 +14,43 @@
        routerLinkActive="active" 
        class="nav-item">
       <i class="pi pi-home"></i>
-      <span>Home</span>
+      <span>Dashboard</span>
     </a>
-    <a routerLink="/dashboard/group" 
-       routerLinkActive="active" 
-       class="nav-item">
-      <i class="pi pi-users"></i>
-      <span>Group</span>
-    </a>
-    <a routerLink="/dashboard/user" 
+
+    @if (hasGroupSelected) {
+      <a routerLink="/dashboard/group" 
+         routerLinkActive="active" 
+         class="nav-item">
+        <i class="pi pi-th-large"></i>
+        <span>Workspace</span>
+      </a>
+
+      <a routerLink="/dashboard/group-management" 
+         routerLinkActive="active" 
+         class="nav-item">
+        <i class="pi pi-cog"></i>
+        <span>Gestión Grupo</span>
+      </a>
+    }
+
+    <a routerLink="/dashboard/profile" 
        routerLinkActive="active" 
        class="nav-item">
       <i class="pi pi-user"></i>
-      <span>User</span>
+      <span>Mi Perfil</span>
     </a>
+
+    @if (isSuperAdmin) {
+      <div class="nav-divider">
+        <span>Administración</span>
+      </div>
+      <a routerLink="/dashboard/user" 
+         routerLinkActive="active" 
+         class="nav-item admin">
+        <i class="pi pi-users"></i>
+        <span>Usuarios</span>
+      </a>
+    }
   </nav>
 </div>
 

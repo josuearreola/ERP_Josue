@@ -17,3 +17,6 @@ router-outlet+* {
     display: block;
     height: 100%;
 }
+:root {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

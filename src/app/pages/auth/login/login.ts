@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,31 +15,25 @@ import { CardModule } from 'primeng/card';
 })
 export class Login {
   user = {
-    username: '',
     email: '',
     password: ''
   };
 
-  private validCredentials = [
-    { email: 'admin@admin.com', password: 'admin123456' },
-    { email: 'josue@gmail.com', password: 'josue123' },
-    { email: 'test@test.com', password: 'test123456' }
-  ];
-
   loginError: string = '';
 
-  constructor(private router: Router) { }
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) { }
 
   onSubmit(form: NgForm) {
     this.loginError = '';
 
     if (form.valid) {
-      const validUser = this.validCredentials.find(
-        cred => cred.email === this.user.email && cred.password === this.user.password
-      );
+      const success = this.authService.login(this.user.email, this.user.password);
 
-      if (validUser) {
-        console.log('Login exitoso:', this.user);
+      if (success) {
+        console.log('Login exitoso');
         this.router.navigate(['/dashboard/home']);
       } else {
         this.loginError = 'Credenciales incorrectas. Verifique su email y contraseña.';

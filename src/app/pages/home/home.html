@@ -1,1 +1,177 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+        <p class="welcome-text">Bienvenido, {{ currentUser?.username || currentUser?.email }}</p>
+    </div>
+
+    <div class="dashboard-content">
+        @if (selectedGroup && groupStats) {
+        <!-- Información y estadísticas del grupo seleccionado -->
+        <div class="selected-group-section">
+            <div class="group-header-row">
+                <div class="group-info-header">
+                    <h2>{{ selectedGroup.nombre }}</h2>
+                    <p class="category">{{ selectedGroup.categoria }}</p>
+                </div>
+                <button pButton severity="success" label="Crear Ticket" icon="pi pi-plus" (click)="onCreateTicket()"
+                    class="create-ticket-btn">
+                </button>
+            </div>
+
+            <!-- Cards de estadísticas por estado -->
+            <div class="stats-grid">
+                <p-card class="stat-card total">
+                    <div class="stat-content">
+                        <i class="pi pi-ticket"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ groupStats.total }}</span>
+                            <span class="stat-label">Total Tickets</span>
+                        </div>
+                    </div>
+                </p-card>
+
+                <p-card class="stat-card pendiente">
+                    <div class="stat-content">
+                        <i class="pi pi-clock"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ groupStats.pendiente }}</span>
+                            <span class="stat-label">Pendiente</span>
+                        </div>
+                    </div>
+                </p-card>
+
+                <p-card class="stat-card en-progreso">
+                    <div class="stat-content">
+                        <i class="pi pi-spin pi-cog"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ groupStats.enProgreso }}</span>
+                            <span class="stat-label">En Progreso</span>
+                        </div>
+                    </div>
+                </p-card>
+
+                <p-card class="stat-card hecho">
+                    <div class="stat-content">
+                        <i class="pi pi-check-circle"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ groupStats.hecho }}</span>
+                            <span class="stat-label">Hecho</span>
+                        </div>
+                    </div>
+                </p-card>
+
+                <p-card class="stat-card bloqueado">
+                    <div class="stat-content">
+                        <i class="pi pi-ban"></i>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ groupStats.bloqueado }}</span>
+                            <span class="stat-label">Bloqueado</span>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+
+            <!-- Sección de listas de tickets -->
+            <div class="tickets-section">
+                <div class="tickets-grid">
+                    <!-- Tickets recientes -->
+                    <div class="ticket-list-container">
+                        <h3><i class="pi pi-history"></i> Tickets Recientes</h3>
+                        @if (recentTickets.length === 0) {
+                        <p class="no-tickets">No hay tickets recientes</p>
+                        } @else {
+                        <p-table [value]="recentTickets" [tableStyle]="{'min-width': '100%'}">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Estado</th>
+                                    <th>Prioridad</th>
+                                    <th>Asignado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-ticket>
+                                <tr>
+                                    <td>{{ ticket.titulo }}</td>
+                                    <td>
+                                        <p-tag [value]="ticket.estado"
+                                            [severity]="getStatusSeverity(ticket.estado)"></p-tag>
+                                    </td>
+                                    <td>
+                                        <p-tag [value]="ticket.prioridad"
+                                            [severity]="getPrioritySeverity(ticket.prioridad)"></p-tag>
+                                    </td>
+                                    <td>{{ ticket.asignadoA }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        }
+                    </div>
+
+                    <!-- Mis tickets -->
+                    <div class="ticket-list-container">
+                        <h3><i class="pi pi-user"></i> Mis Tickets Asignados</h3>
+                        @if (myTickets.length === 0) {
+                        <p class="no-tickets">No tienes tickets asignados</p>
+                        } @else {
+                        <p-table [value]="myTickets" [tableStyle]="{'min-width': '100%'}">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Estado</th>
+                                    <th>Prioridad</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-ticket>
+                                <tr>
+                                    <td>{{ ticket.titulo }}</td>
+                                    <td>
+                                        <p-tag [value]="ticket.estado"
+                                            [severity]="getStatusSeverity(ticket.estado)"></p-tag>
+                                    </td>
+                                    <td>
+                                        <p-tag [value]="ticket.prioridad"
+                                            [severity]="getPrioritySeverity(ticket.prioridad)"></p-tag>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- Lista de grupos disponibles -->
+        <div class="groups-section">
+            <h2>{{ selectedGroup ? 'Cambiar Grupo de Trabajo' : 'Selecciona un Grupo de Trabajo' }}</h2>
+
+            @if (userGroups.length === 0) {
+            <p class="no-groups">No perteneces a ningún grupo.</p>
+            } @else {
+            <div class="groups-grid">
+                @for (group of userGroups; track group.id) {
+                <div class="group-card" [class.selected]="isGroupSelected(group)" (click)="selectGroup(group)">
+                    <div class="group-icon">
+                        <i class="pi pi-users"></i>
+                    </div>
+                    <div class="group-info">
+                        <h3>{{ group.nombre }}</h3>
+                        <p class="category">{{ group.categoria }}</p>
+                        <div class="group-stats">
+                            <span><i class="pi pi-ticket"></i> {{ group.tickets }} tickets</span>
+                        </div>
+                    </div>
+                    @if (isGroupSelected(group)) {
+                    <div class="check-icon">
+                        <i class="pi pi-check-circle"></i>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</div>
 

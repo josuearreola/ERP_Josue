@@ -1,6 +1,7 @@
 {
   "name": "erp-josue",
   "version": "0.0.0",
+  "author": "Josue",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

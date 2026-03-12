@@ -1,121 +1,263 @@
-<div class="page-content">
+<div class="user-management-page">
   <p-toast></p-toast>
   <p-confirmDialog></p-confirmDialog>
   
-  <div class="header-section">
-    <div class="stats-row">
-      
-      <p-button label="Nuevo Usuario" icon="pi pi-plus" (onClick)="showCreateDialog()"
-        styleClass="p-button-success new-user-btn">
-      </p-button>
-      </div>
-    
-    
-    
-    <!-- Tabla de usuarios -->
-    <div class="users-table">
-      <h2>Lista de Usuarios</h2>
-      <p-table [value]="users" [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-gridlines">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Email</th>
-            <th>Nombre Completo</th>
-            <th>Teléfono</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-user>
-          <tr>
-            <td>{{user.id}}</td>
-            <td>{{user.username}}</td>
-            <td>{{user.email}}</td>
-            <td>{{user.fullName}}</td>
-            <td>{{user.phone}}</td>
-            <td>{{user.role}}</td>
-            <td>{{user.status}}</td>
-            <td>
-              <p-button icon="pi pi-pencil" (onClick)="editUser(user)" styleClass="p-button-warning p-button-text">
-              </p-button>
-              <p-button icon="pi pi-trash" (onClick)="deleteUser(user)" styleClass="p-button-danger p-button-text">
-              </p-button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+  <div class="page-header">
+    <div>
+      <h1><i class="pi pi-users"></i> Gestión de Usuarios</h1>
+      <p class="subtitle">Panel de SuperAdmin - Control total del sistema</p>
     </div>
-    
-    <!-- Modal para crear/editar usuario -->
-    <p-dialog [header]="isEditing ? 'Editar Usuario' : 'Nuevo Usuario'" [(visible)]="displayDialog" [modal]="true"
-      [style]="{width: '700px'}" [draggable]="false" [resizable]="false">
-    
-      <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="user-form">
+    <button 
+      pButton 
+      label="Nuevo Usuario" 
+      icon="pi pi-user-plus" 
+      severity="success"
+      (click)="showCreateDialog()">
+    </button>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="users-section">
+    <p-table [value]="users" [tableStyle]="{'min-width': '100%'}">
+      <ng-template #header>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Email</th>
+          <th scope="col">Nombre Completo</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Permisos</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-user>
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>
+            <span class="username-cell">
+              <i class="pi pi-user"></i>
+              {{ user.username }}
+            </span>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.fullName }}</td>
+          <td>
+            <p-tag [value]="user.role" [severity]="getRoleSeverity(user.role)"></p-tag>
+          </td>
+          <td>
+            <span class="permissions-badge">
+              <i class="pi pi-shield"></i>
+              {{ getPermissionCount(user) }} permisos
+            </span>
+          </td>
+          <td>
+            <p-tag 
+              [value]="user.status" 
+              [severity]="user.status === 'Activo' ? 'success' : 'danger'">
+            </p-tag>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button 
+                pButton 
+                icon="pi pi-shield" 
+                severity="info"
+                size="small"
+                (click)="openPermissionsModal(user)"
+                title="Gestionar permisos">
+              </button>
+              <button 
+                pButton 
+                icon="pi pi-pencil" 
+                severity="warn"
+                size="small"
+                (click)="editUser(user)"
+                title="Editar usuario">
+              </button>
+              <button 
+                pButton 
+                icon="pi pi-trash" 
+                severity="danger"
+                size="small"
+                (click)="deleteUser(user)"
+                [disabled]="user.username === 'admin'"
+                title="Eliminar usuario">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Modal crear/editar usuario -->
+  <p-dialog 
+    [header]="isEditing ? 'Editar Usuario' : 'Nuevo Usuario'" 
+    [(visible)]="displayDialog" 
+    [modal]="true"
+    [style]="{width: '750px'}">
+  
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="user-form">
       <div class="form-row">
         <div class="field">
-          <label for="username">Usuario</label>
-          <input pInputText type="text" id="username" name="username" [(ngModel)]="user.username" required class="w-full" />
-          </div>
-        <div class="field">
-          <label for="email">Correo Electrónico</label>
-          <input pInputText type="email" id="email" name="email" [(ngModel)]="user.email" required class="w-full" />
-          </div>
-          </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="fullName">Nombre Completo</label>
-          <input pInputText type="text" id="fullName" name="fullName" [(ngModel)]="user.fullName" required class="w-full" />
-          </div>
-          <div class="field">
-            <label for="birthDate">Fecha de Nacimiento</label>
-            <input pInputText type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" required class="w-full" />
-          </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="field">
-          <label for="phone">Teléfono</label>
-          <input pInputText type="text" id="phone" name="phone" [(ngModel)]="user.phone" placeholder="Número de teléfono" required
+          <label for="username">Usuario *</label>
+          <input 
+            pInputText 
+            type="text" 
+            id="username" 
+            name="username" 
+            [(ngModel)]="user.username" 
+            required 
             class="w-full" />
-          </div>
+        </div>
         <div class="field">
-          <label for="role">Rol</label>
-          <select id="role" name="role" [(ngModel)]="user.role" required class="form-select w-full">
-            <option value="">Seleccionar rol</option>
-            <option value="Administrador">Administrador</option>
-            <option value="Usuario">Usuario</option>
-            <option value="Supervisor">Supervisor</option>
-            <option value="Gerente">Gerente</option>
-            <option value="Operador">Operador</option>
-          </select>
-          </div>
+          <label for="email">Correo Electrónico *</label>
+          <input 
+            pInputText 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="user.email" 
+            required 
+            class="w-full" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="fullName">Nombre Completo *</label>
+          <input 
+            pInputText 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            [(ngModel)]="user.fullName" 
+            required 
+            class="w-full" />
+        </div>
+        <div class="field">
+          <label for="birthDate">Fecha de Nacimiento</label>
+          <input 
+            pInputText 
+            type="date" 
+            id="birthDate" 
+            name="birthDate" 
+            [(ngModel)]="user.birthDate" 
+            class="w-full" />
+        </div>
       </div>
       
       <div class="form-row">
         <div class="field">
-          <label for="address">Dirección</label>
-          <input pInputText type="text" id="address" name="address" [(ngModel)]="user.address" placeholder="Dirección completa"
-            required class="w-full" />
-          </div>
-        <div class="field">
-          <label for="status">Estado</label>
-          <select id="status" name="status" [(ngModel)]="user.status" required class="form-select w-full">
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
-            <option value="Suspendido">Suspendido</option>
-          </select>
-          </div>
-          </div>
-          
-          <div class="form-actions">
-        <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayDialog = false" styleClass="p-button-text">
-        </p-button>
-        <p-button label="{{isEditing ? 'Actualizar' : 'Crear'}}" icon="pi pi-check" type="submit" styleClass="p-button-success">
-        </p-button>
+          <label for="phone">Teléfono</label>
+          <input 
+            pInputText 
+            type="text" 
+            id="phone" 
+            name="phone" 
+            [(ngModel)]="user.phone" 
+            placeholder="Número de teléfono"
+            class="w-full" />
         </div>
-        </form>
+        <div class="field">
+          <label for="role">Rol *</label>
+          <p-select 
+            id="role" 
+            name="role" 
+            [(ngModel)]="user.role" 
+            [options]="roles"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccionar rol"
+            required 
+            class="w-full">
+          </p-select>
+        </div>
+      </div>
+      
+      <div class="field-full">
+        <label for="address">Dirección</label>
+        <input 
+          pInputText 
+          type="text" 
+          id="address" 
+          name="address" 
+          [(ngModel)]="user.address" 
+          placeholder="Dirección completa"
+          class="w-full" />
+      </div>
+
+      <div class="modal-footer">
+        <button 
+          pButton 
+          type="button"
+          label="Cancelar" 
+          severity="secondary" 
+          (click)="displayDialog = false">
+        </button>
+        <button 
+          pButton 
+          type="submit"
+          [label]="isEditing ? 'Actualizar' : 'Crear Usuario'" 
+          severity="success"
+          icon="pi pi-save"
+          [disabled]="!userForm.valid">
+        </button>
+      </div>
+    </form>
   </p-dialog>
 
+  <!-- Modal de permisos -->
+  <p-dialog 
+    header="Gestionar Permisos" 
+    [(visible)]="displayPermissionsModal" 
+    [modal]="true"
+    [style]="{width: '700px'}">
+    
+    @if (selectedUserForPermissions) {
+      <div class="permissions-modal">
+        <div class="user-info-header">
+          <i class="pi pi-user"></i>
+          <div>
+            <h3>{{ selectedUserForPermissions.username }}</h3>
+            <p>{{ selectedUserForPermissions.email }}</p>
+          </div>
+        </div>
+
+        <div class="permissions-grid">
+          @for (permission of availablePermissions; track permission.name) {
+            <div class="permission-item">
+              <label class="permission-label">
+                <input 
+                  type="checkbox" 
+                  [checked]="selectedUserForPermissions.permissions.includes(permission.name)"
+                  (change)="togglePermission($event, permission.name)">
+                <div class="permission-info">
+                  <span class="permission-name">{{ permission.label }}</span>
+                  <span class="permission-desc">{{ permission.description }}</span>
+                </div>
+              </label>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <ng-template #footer>
+      <button 
+        pButton 
+        label="Cancelar" 
+        severity="secondary" 
+        (click)="displayPermissionsModal = false">
+      </button>
+      <button 
+        pButton 
+        label="Guardar Permisos" 
+        severity="success" 
+        icon="pi pi-save"
+        (click)="savePermissions()">
+      </button>
+    </ng-template>
+  </p-dialog>
 </div>

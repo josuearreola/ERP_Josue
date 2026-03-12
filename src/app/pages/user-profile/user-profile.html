@@ -1,0 +1,107 @@
+<div class="user-profile-container">
+  <div class="profile-header">
+    <div class="avatar-section">
+      <div class="avatar-circle">
+        <i class="pi pi-user"></i>
+      </div>
+      <div class="user-info">
+        <h1>{{ currentUser?.username }}</h1>
+        <p class="email">{{ currentUser?.email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas de tickets -->
+  <div class="stats-section">
+    <h2><i class="pi pi-chart-bar"></i> Mis Tickets</h2>
+    <div class="stats-grid">
+      <p-card class="stat-card total">
+        <div class="stat-content">
+          <i class="pi pi-ticket"></i>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats.total }}</span>
+            <span class="stat-label">Total Asignados</span>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="stat-card pendiente">
+        <div class="stat-content">
+          <i class="pi pi-clock"></i>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats.pendiente }}</span>
+            <span class="stat-label">Pendiente</span>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="stat-card en-progreso">
+        <div class="stat-content">
+          <i class="pi pi-spin pi-cog"></i>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats.enProgreso }}</span>
+            <span class="stat-label">En Progreso</span>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="stat-card hecho">
+        <div class="stat-content">
+          <i class="pi pi-check-circle"></i>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats.hecho }}</span>
+            <span class="stat-label">Completados</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Lista de tickets asignados -->
+  <div class="tickets-section">
+    <h2><i class="pi pi-list"></i> Tickets Asignados</h2>
+    @if (assignedTickets.length === 0) {
+      <p-card>
+        <p class="no-tickets">No tienes tickets asignados</p>
+      </p-card>
+    } @else {
+      <p-table [value]="assignedTickets" [tableStyle]="{'min-width': '100%'}">
+        <ng-template #header>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Título</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Prioridad</th>
+            <th scope="col">Grupo</th>
+            <th scope="col">Fecha Límite</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-ticket>
+          <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.titulo }}</td>
+            <td>
+              <p-tag [value]="ticket.estado" [severity]="getStatusSeverity(ticket.estado)"></p-tag>
+            </td>
+            <td>
+              <p-tag [value]="ticket.prioridad" [severity]="getPrioritySeverity(ticket.prioridad)"></p-tag>
+            </td>
+            <td>Grupo {{ ticket.groupId }}</td>
+            <td>{{ ticket.fechaLimite ? (ticket.fechaLimite | date:'dd/MM/yyyy') : '-' }}</td>
+            <td>
+              <button 
+                pButton 
+                icon="pi pi-arrow-right" 
+                severity="info"
+                size="small"
+                (click)="navigateToGroup(ticket.groupId)"
+                title="Ir al grupo">
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </div>
+</div>

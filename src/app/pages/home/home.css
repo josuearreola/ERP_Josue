@@ -1,39 +1,392 @@
-.welcome-section {
-  background: white;
+.dashboard-container {
   padding: 2rem;
+  max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 2rem;
+  
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+  
+    .welcome-text {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+  }
+  
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .selected-group-info {
+    .card-header {
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+  
+      h2 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+    }
+  
+    .group-details {
+      padding: 1rem;
+  
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.8rem;
+        color: #333;
+      }
+  
+      .category {
+        margin: 0 0 1rem 0;
+        color: #666;
+        font-size: 1rem;
+      }
+  
+      .stats {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 1rem;
+        color: #888;
+  
+        span {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+  
+          i {
+            font-size: 1.1rem;
+            color: #667eea;
+          }
+        }
+      }
+    }
+  }
+  
+  .groups-section {
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+  }
+  
+  .no-groups {
+    padding: 2rem;
+    text-align: center;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    color: #856404;
+    font-size: 1.1rem;
+  }
+  
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .group-card {
+    position: relative;
+    padding: 1.5rem;
+    border: 2px solid #e0e0e0;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+    &:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+      transform: translateY(-4px);
+    }
+  
+    &.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #f0f3ff 0%, #faf0ff 100%);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+  
+    .group-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+  
+      i {
+        font-size: 1.8rem;
+        color: white;
+      }
+    }
+  
+    .group-info {
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.3rem;
+        color: #333;
+        font-weight: 600;
+      }
+  
+      .category {
+        margin: 0 0 1rem 0;
+        color: #666;
+        font-size: 0.95rem;
+      }
+  
+      .group-stats {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.9rem;
+        color: #888;
+  
+        span {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+  
+          i {
+            font-size: 1rem;
+            color: #667eea;
+          }
+        }
+      }
+    }
+  
+    .check-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #667eea;
+      font-size: 1.8rem;
+      animation: checkBounce 0.3s ease;
+    }
+  }
+  
+  .selected-group-section {
+    margin-bottom: 2rem;
+  
+    .group-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      color: white;
+  
+      .group-info-header {
+        h2 {
+          margin: 0 0 0.5rem 0;
+          font-size: 2rem;
+          font-weight: 700;
+        }
+  
+        .category {
+          margin: 0;
+          font-size: 1.1rem;
+          opacity: 0.9;
+        }
+      }
+  
+      .create-ticket-btn {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+      }
+    }
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
   margin-bottom: 2rem;
+.stat-card {
+    cursor: default;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    
+
+        .stat-content {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.5rem;
+    
+          i {
+            font-size: 2.5rem;
+          }
+    
+          .stat-info {
+            display: flex;
+            flex-direction: column;
+    
+            .stat-value {
+              font-size: 2rem;
+              font-weight: 700;
+          line-height: 1;
+            margin-bottom: 0.25rem;
+          }
+          
+          .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+          }
+          }
+          }
+          
+          &.total {
+            i {
+              color: #667eea;
+            }
+          
+            .stat-value {
+              color: #667eea;
+            }
+          }
+          
+          &.pendiente {
+            i {
+              color: #f59e0b;
+            }
+          
+            .stat-value {
+              color: #f59e0b;
+            }
+          }
+          
+          &.en-progreso {
+            i {
+              color: #3b82f6;
+            }
+          
+            .stat-value {
+              color: #3b82f6;
+            }
+          }
+          
+          &.hecho {
+            i {
+              color: #10b981;
+            }
+          
+            .stat-value {
+              color: #10b981;
+            }
+          }
+          
+          &.bloqueado {
+            i {
+              color: #ef4444;
+            }
+          
+            .stat-value {
+              color: #ef4444;
+            }
+          }
+          }
 }
 
-.welcome-section h1 {
-  color: #1e293b;
-  margin-bottom: 1rem;
-  font-size: 2.25rem;
-  font-weight: 700;
-}
-
-.welcome-section p {
-  color: #64748b;
+.tickets-section {
   margin-bottom: 2rem;
-  font-size: 1.125rem;
-}
+.tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
 
-.dashboard-preview {
-  background: #f1f5f9;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid #3b82f6;
-}
+    .ticket-list-container {
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
 
-.dashboard-preview h3 {
-  color: #1e293b;
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
+        i {
+          color: #667eea;
+        }
+      }
 
-.dashboard-preview p {
-  color: #64748b;
-  margin: 0;
-}
+            .no-tickets {
+              padding: 2rem;
+              text-align: center;
+              background-color: #f8f9fa;
+              border-radius: 8px;
+        color: #6c757d;
+        }
+        }
+        }
+        }
+        
+        @keyframes checkBounce {
+        
+          0% {
+            transform: scale(0);
+          }
+        
+          50% {
+            transform: scale(1.2);
+          }
+        
+          100% {
+            transform: scale(1);
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .dashboard-container {
+            padding: 1rem;
+          }
+        
+          .dashboard-header {
+            h1 {
+              font-size: 1.8rem;
+            }
+          }
+        
+          .groups-grid {
+            grid-template-columns: 1fr;
+          }
+        
+          .selected-group-section {
+            .group-header-row {
+              flex-direction: column;
+              gap: 1rem;
+              text-align: center;
+        
+              .create-ticket-btn {
+                width: 100%;
+              }
+            }
+          }
+
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .tickets-section {
+      .tickets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    }

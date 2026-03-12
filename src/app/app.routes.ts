@@ -10,6 +10,8 @@ export const routes: Routes = [
         children: [
             { path: 'home', loadComponent: () => import('./pages/home/home').then(m => m.Home) },
             { path: 'group', loadComponent: () => import('./pages/group/group').then(m => m.Group) },
+            { path: 'profile', loadComponent: () => import('./pages/user-profile/user-profile').then(m => m.UserProfile) },
+            { path: 'group-management', loadComponent: () => import('./pages/group-management/group-management').then(m => m.GroupManagement) },
             { path: 'user', loadComponent: () => import('./pages/user/user').then(m => m.User) },
             { path: '', redirectTo: 'home', pathMatch: 'full' }
         ]

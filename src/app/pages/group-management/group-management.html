@@ -1,0 +1,193 @@
+<div class="group-management-container">
+  <p-toast></p-toast>
+
+  <div class="page-header">
+    <div>
+      <h1><i class="pi pi-cog"></i> Gestión del Grupo</h1>
+      <p class="subtitle">{{ groupConfig?.nombre }}</p>
+    </div>
+    <button 
+      pButton 
+      label="Editar Grupo" 
+      icon="pi pi-pencil" 
+      severity="warn"
+      (click)="openEditGroupModal()">
+    </button>
+  </div>
+
+  <!-- Configuración básica del grupo -->
+  <div class="section">
+    <p-card>
+      <ng-template #header>
+        <div class="card-header">
+          <h2><i class="pi pi-info-circle"></i> Información del Grupo</h2>
+        </div>
+      </ng-template>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Nombre:</label>
+          <span>{{ groupConfig?.nombre }}</span>
+        </div>
+        <div class="info-item">
+          <label>Categoría:</label>
+          <span>{{ groupConfig?.categoria }}</span>
+        </div>
+        <div class="info-item">
+          <label>Total de usuarios:</label>
+          <span>{{ (groupConfig?.usuarios || []).length }}</span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Lista de usuarios del grupo -->
+  <div class="section">
+    <div class="section-header">
+      <h2><i class="pi pi-users"></i> Usuarios del Grupo</h2>
+      <button 
+        pButton 
+        label="Añadir Usuario" 
+        icon="pi pi-user-plus" 
+        severity="success"
+        (click)="openAddUserModal()">
+      </button>
+    </div>
+
+    @if (groupConfig) {
+      <p-table [value]="groupConfig.usuarios" [tableStyle]="{'min-width': '100%'}">
+        <ng-template #header>
+          <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Permisos</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-user>
+          <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+              <span class="role-badge" [class.admin]="user.role === 'Admin'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <div class="permissions-list">
+                @for (permission of user.permissions.slice(0, 3); track permission) {
+                  <span class="permission-chip">{{ getPermissionLabel(permission) }}</span>
+                }
+                @if (user.permissions.length > 3) {
+                  <span class="permission-chip more">+{{ user.permissions.length - 3 }}</span>
+                }
+              </div>
+            </td>
+            <td>
+              <button 
+                pButton 
+                icon="pi pi-trash" 
+                severity="danger"
+                size="small"
+                (click)="removeUserFromGroup(user.email)"
+                [disabled]="user.email === currentUser?.email"
+                title="Eliminar del grupo">
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </div>
+</div>
+
+<!-- Modal Añadir Usuario -->
+<p-dialog 
+  header="Añadir Usuario al Grupo" 
+  [(visible)]="displayAddUserModal" 
+  [modal]="true" 
+  [style]="{width: '500px'}">
+  
+  <div class="modal-content">
+    <div class="field">
+      <label for="userEmail">Email del usuario *</label>
+      <input 
+        pInputText 
+        id="userEmail" 
+        [(ngModel)]="newUserEmail" 
+        class="w-full"
+        placeholder="ejemplo@correo.com"
+        type="email">
+    </div>
+
+    <div class="info-box">
+      <i class="pi pi-info-circle"></i>
+      <span>El usuario será añadido con permisos básicos (ver, crear tickets, comentar)</span>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <button 
+      pButton 
+      label="Cancelar" 
+      severity="secondary" 
+      (click)="displayAddUserModal = false">
+    </button>
+    <button 
+      pButton 
+      label="Añadir Usuario" 
+      severity="success" 
+      icon="pi pi-user-plus"
+      (click)="addUserToGroup()"
+      [disabled]="!newUserEmail.trim()">
+    </button>
+  </ng-template>
+</p-dialog>
+
+<!-- Modal Editar Grupo -->
+<p-dialog 
+  header="Editar Configuración del Grupo" 
+  [(visible)]="displayEditGroupModal" 
+  [modal]="true" 
+  [style]="{width: '600px'}">
+  
+  <div class="modal-content">
+    <div class="field">
+      <label for="groupName">Nombre del grupo *</label>
+      <input 
+        pInputText 
+        id="groupName" 
+        [(ngModel)]="editedGroupName" 
+        class="w-full"
+        placeholder="Nombre del grupo">
+    </div>
+
+    <div class="field">
+      <label for="groupCategory">Categoría *</label>
+      <input 
+        pInputText 
+        id="groupCategory" 
+        [(ngModel)]="editedGroupCategory" 
+        class="w-full"
+        placeholder="Categoría del grupo">
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <button 
+      pButton 
+      label="Cancelar" 
+      severity="secondary" 
+      (click)="displayEditGroupModal = false">
+    </button>
+    <button 
+      pButton 
+      label="Guardar Cambios" 
+      severity="success" 
+      icon="pi pi-save"
+      (click)="saveGroupSettings()"
+      [disabled]="!editedGroupName.trim() || !editedGroupCategory.trim()">
+    </button>
+  </ng-template>
+</p-dialog>
